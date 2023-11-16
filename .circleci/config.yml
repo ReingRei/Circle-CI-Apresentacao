@@ -1,18 +1,22 @@
 version: 2.1
+
 orbs:
-  node: circleci/node@1.1.6
+  node: circleci/node@x.y
+
 jobs:
-  build-and-tests:
-    executor:
-      mane: node/default
+  install-node-example:
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
-      - node/with-cache: 
-          steps:
-            -run: 
-              name: "Say hello"
-              command: "mp install"
+      - node/install:
+          install-yarn: true
+          node-version: '16.13'
+      - run: npm install
+      - run: npm test
 workflows:
-  build-and-tests:
+  test_my_app:
     jobs:
-      - build-and-tests
+      - install-node-example
+
+
